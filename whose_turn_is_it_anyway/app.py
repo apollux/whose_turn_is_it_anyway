@@ -11,9 +11,12 @@ from whose_turn_is_it_anyway.extensions import (
     login_manager,
     migrate,
     debug_toolbar,
+    admin,
 )
-from whose_turn_is_it_anyway import public, user
-
+from whose_turn_is_it_anyway import public, user, activity
+from flask_admin.contrib.sqla import ModelView
+from whose_turn_is_it_anyway.user.models import User
+from whose_turn_is_it_anyway.activity.models import Activity
 
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here:
@@ -32,17 +35,21 @@ def create_app(config_object=ProdConfig):
 def register_extensions(app):
     assets.init_app(app)
     bcrypt.init_app(app)
-    cache.init_app(app)
+    #cache.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
+    #admin.init_app(app)
+    #admin.add_view(ModelView(User, db.session))
+    #admin.add_view(ModelView(Activity, db.session))
     return None
 
 
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
+    app.register_blueprint(activity.views.blueprint)
     return None
 
 
