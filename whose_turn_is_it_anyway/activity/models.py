@@ -12,7 +12,9 @@ from whose_turn_is_it_anyway.database import (
 
 class Activity(SurrogatePK, Model):
     __tablename__ = 'activities'
-    name = Column(db.String(80), unique=True, nullable=False)
+    name = Column(db.String(80), unique=False, nullable=False)
+    creator_id = Column(db.Integer, db.ForeignKey('users.id'))
+    creator = relationship('User', uselist=False)
     participants = relationship("Participant")
 
     def __init__(self, name, **kwargs):
