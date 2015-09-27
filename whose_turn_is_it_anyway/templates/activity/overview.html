@@ -4,8 +4,17 @@
 <h1>Welcome {{ session.username }}</h1>
 
 <div class="container-narrow">
-  <h1>New Activity</h1>
-    <br/>
+    {%if activities|length > 0 %}
+        <h1>Activities</h1>
+        <br/>
+        <ul>
+        {% for activity in activities %}
+            <li><a href="{{ url_for('activities.activity_detail', activity_id=activity.id) }}">{{ activity.name }}</a></li>
+        {% endfor %}
+        </ul>
+
+    <h1>New Activity</h1>
+    {% endif %}
     <form id="createActivityForm" class="form form-register" method="POST" action="" role="form">
     {{ form.hidden_tag() }}
     <div class="form-group">
@@ -13,28 +22,20 @@
         {{form.name(placeholder="Name of the Activity", class_="form-control")}}
     </div>
 
-    <div data-toggle="fieldset" id="phone-fieldset">
-        {{ form.participants.label }} <button type="button" data-toggle="fieldset-add-row" data-target="#phone-fieldset">+</button>
-        <table>
-            <tr>
-                <th>Type</th>
-                <th>Number</th>
-                <th>Extension</th>
-                <th></th>
-            </tr>
+    <div data-toggle="fieldset" id="participants-fieldset">
+        <div class="form-group">
+            {{ form.participants.label }}
             {% for participant in form.participants %}
-            <tr data-toggle="fieldset-entry">
-                <td>{{ participant }}</td>
-                <td></td>
-                <td></td>
-                <td><button type="button" data-toggle="fieldset-remove-row" id="phone-{{loop.index0}}-remove">-</button></td>
-            </tr>
+            <span data-toggle="fieldset-entry">
+                {{ participant(placeholder="Name", class_="form-control") }}
+                <!--button type="button" data-toggle="fieldset-remove-row" id="participant-{{loop.index0}}-remove">-</button-->
+            </span>
             {% endfor %}
-        </table>
+        </div>
+        <button class="btn btn-default" type="button" data-toggle="fieldset-add-row" data-target="#participants-fieldset">Add another</button>
     </div>
-    <p><input class="btn btn-default btn-submit" type="submit" value="Create"></p>
+    <div class="form-group"><input class="btn btn-default btn-submit" type="submit" value="Create"></div>
     </form>
-    <p><em>Already registered?</em> Click <a href="/">here</a> to login.</p>
 </div>
 {% endblock %}
 
@@ -46,26 +47,24 @@
             //Add new entry
         $this.find("button[data-toggle=fieldset-add-row]").click(function() {
             var target = $($(this).data("target"))
-            console.log(target);
-            var oldrow = target.find("tr[data-toggle=fieldset-entry]:last");
+            var oldrow = target.find("span[data-toggle=fieldset-entry]:last");
             var row = oldrow.clone(true, true);
             var new_input = row.find(":input").filter(":first");
-            console.log(new_input);
             var elem_id = new_input.prop('id');
             var split_id = elem_id.split('-')
             var elem_num = parseInt(split_id[1]) + 1;
             row.attr('data-id', elem_num);
             var new_id=split_id[0] + '-' + elem_num;
-
             new_input.prop('id', new_id);
             new_input.prop('name', new_id);
+            new_input.val("");
             oldrow.after(row);
         }); //End add new entry
 
                 //Remove row
         $this.find("button[data-toggle=fieldset-remove-row]").click(function() {
-            if($this.find("div[data-toggle=fieldset-entry]").length > 1) {
-                var thisRow = $(this).closest("div[data-toggle=fieldset-entry]");
+            if($this.find("span[data-toggle=fieldset-entry]").length > 1) {
+                var thisRow = $(this).closest("span[data-toggle=fieldset-entry]");
                 thisRow.remove();
             }
         }); //End remove row

@@ -1,0 +1,23 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<h1>Welcome {{ session.username }}</h1>
+
+<div class="container-narrow">
+        <h1>Activity {{ activity.name }}</h1>
+        <br/>
+
+    <form id="NewOccurrenceForm" class="form form-register" method="POST" action="" role="form">
+    <table>
+        <tr><th>Participant</th><th>Times</th><th></th></tr>
+        {% for participant in activity.participants %}
+        <tr>
+            <td>{{ participant.nick_name }}</td>
+            <td>{{ participant.occurrences|length }}</td>
+            <td><input type="submit" id="{{ participant.id }}"  name="{{ participant.id }}" value="Did it" /></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+{% endblock %}
