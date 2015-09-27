@@ -7,13 +7,69 @@
   <h1>New Activity</h1>
     <br/>
     <form id="createActivityForm" class="form form-register" method="POST" action="" role="form">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{form.name.label}}
-                {{form.name(placeholder="Name of the Activity", class_="form-control")}}
-            </div>
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{form.name.label}}
+        {{form.name(placeholder="Name of the Activity", class_="form-control")}}
+    </div>
+
+    <div data-toggle="fieldset" id="phone-fieldset">
+        {{ form.participants.label }} <button type="button" data-toggle="fieldset-add-row" data-target="#phone-fieldset">+</button>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Number</th>
+                <th>Extension</th>
+                <th></th>
+            </tr>
+            {% for participant in form.participants %}
+            <tr data-toggle="fieldset-entry">
+                <td>{{ participant }}</td>
+                <td></td>
+                <td></td>
+                <td><button type="button" data-toggle="fieldset-remove-row" id="phone-{{loop.index0}}-remove">-</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
     <p><input class="btn btn-default btn-submit" type="submit" value="Create"></p>
     </form>
     <p><em>Already registered?</em> Click <a href="/">here</a> to login.</p>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>$(function() {
+    $("div[data-toggle=fieldset]").each(function() {
+        var $this = $(this);
+
+            //Add new entry
+        $this.find("button[data-toggle=fieldset-add-row]").click(function() {
+            var target = $($(this).data("target"))
+            console.log(target);
+            var oldrow = target.find("tr[data-toggle=fieldset-entry]:last");
+            var row = oldrow.clone(true, true);
+            var new_input = row.find(":input").filter(":first");
+            console.log(new_input);
+            var elem_id = new_input.prop('id');
+            var split_id = elem_id.split('-')
+            var elem_num = parseInt(split_id[1]) + 1;
+            row.attr('data-id', elem_num);
+            var new_id=split_id[0] + '-' + elem_num;
+
+            new_input.prop('id', new_id);
+            new_input.prop('name', new_id);
+            oldrow.after(row);
+        }); //End add new entry
+
+                //Remove row
+        $this.find("button[data-toggle=fieldset-remove-row]").click(function() {
+            if($this.find("div[data-toggle=fieldset-entry]").length > 1) {
+                var thisRow = $(this).closest("div[data-toggle=fieldset-entry]");
+                thisRow.remove();
+            }
+        }); //End remove row
+    });
+});
+</script>
 {% endblock %}

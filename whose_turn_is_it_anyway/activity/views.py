@@ -18,9 +18,10 @@ def overview():
     flash("Woei!", 'success')
 
     form = CreateActivityForm(request.form)
+    form.participants.append_entry("tessthsthstt")
     if form.validate_on_submit():
         new_activity = Activity.create(name=form.name.data, creator_id=current_user.get_id())
-        flash("Activity created, You can now start tracking whose turn it is!", 'success')
+        flash("Activity created, You can now start tracking whose turn it is! {}".format(form.participants.data), 'success')
         return redirect(url_for('activities.overview'))
     else:
         flash_errors(form)
