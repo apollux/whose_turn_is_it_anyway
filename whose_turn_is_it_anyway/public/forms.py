@@ -20,12 +20,8 @@ class LoginForm(Form):
             return False
 
         self.user = User.query.filter_by(username=self.username.data).first()
-        if not self.user:
-            self.username.errors.append('Unknown username')
-            return False
-
-        if not self.user.check_password(self.password.data):
-            self.password.errors.append('Invalid password')
+        if not self.user or not self.user.check_password(self.password.data):
+            self.username.errors.append('Invalid username and password combination')
             return False
 
         if not self.user.active:
