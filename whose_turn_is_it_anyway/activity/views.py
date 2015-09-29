@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from flask import (Blueprint, request, render_template, flash, url_for,
                    redirect, session)
-
+from sqlalchemy.sql import func
 from flask_login import login_required, current_user
 
 from whose_turn_is_it_anyway.utils import flash_errors
 
 from .forms import CreateActivityForm
 from .models import Activity, Participant, Occurrence
+from whose_turn_is_it_anyway.extensions import db
 
 blueprint = Blueprint('activities', __name__, url_prefix='/activity', static_folder="../static")
 
@@ -15,7 +16,17 @@ blueprint = Blueprint('activities', __name__, url_prefix='/activity', static_fol
 @blueprint.route("/", methods=["GET", "POST"])
 @login_required
 def overview():
-    activities = Activity.query.filter_by(creator_id=current_user.get_id()).all()
+
+    activity_ids_from_participants = db.session.query(Participant.activity_id).\
+        filter(Participant.user_id == current_user.get_id())\
+        .all()
+    activity_ids_from_creator = db.session.query(Activity.id)\
+        .filter(Activity.creator_id == current_user.get_id())\
+        .all()
+    activity_ids_for_user = list(set(activity_ids_from_participants + activity_ids_from_creator))
+    activity_ids_for_user = [t[0] for t in activity_ids_for_user]
+    activities = Activity.query.filter(Activity.id.in_(activity_ids_for_user)).all()
+
     form = CreateActivityForm(request.form)
     if form.validate_on_submit():
         new_activity = Activity.create(name=form.name.data, creator_id=current_user.get_id())
