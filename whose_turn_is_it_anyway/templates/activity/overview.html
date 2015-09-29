@@ -1,11 +1,11 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<h1>Welcome {{ session.username }}</h1>
+<h1>Overview</h1>
 
 <div class="container-narrow">
     {%if activities|length > 0 %}
-        <h1>Activities</h1>
+        <h2>Activities</h2>
         <br/>
         <ul>
         {% for activity in activities %}
@@ -13,9 +13,9 @@
         {% endfor %}
         </ul>
 
-    <h1>New Activity</h1>
+    <h2>New Activity</h2>
     {% endif %}
-    <form id="createActivityForm" class="form form-register" method="POST" action="" role="form">
+    <form id="createActivityForm" class="form" method="POST" action="" role="form">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{form.name.label}}
@@ -24,8 +24,8 @@
 
     <div data-toggle="fieldset" id="participants-fieldset">
         <div class="form-group">
-            {{ form.current_user_as_participant.label }}
             {{ form.current_user_as_participant }}
+            {{ form.current_user_as_participant.label }}
         </div>
         <div class="form-group">
             {{ form.participants.label }}
@@ -36,7 +36,9 @@
             </span>
             {% endfor %}
         </div>
-        <button class="btn btn-default" type="button" data-toggle="fieldset-add-row" data-target="#participants-fieldset">Add another</button>
+        <div class="form-group">
+            <button class="btn btn-default" type="button" data-toggle="fieldset-add-row" data-target="#participants-fieldset">Add another</button>
+        </div>
     </div>
     <div class="form-group"><input class="btn btn-default btn-submit" type="submit" value="Create"></div>
     </form>
