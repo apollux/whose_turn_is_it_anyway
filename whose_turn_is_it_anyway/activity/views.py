@@ -23,6 +23,8 @@ def overview():
             sanitized_participant = participant.data.strip()
             if sanitized_participant:
                 Participant.create(name=sanitized_participant, activity_id=new_activity.id)
+        if form.current_user_as_participant:
+            Participant.create(activity_id=new_activity.id, user_id=current_user.get_id())
 
         flash("Activity created, You can now start tracking whose turn it is! {}".format(form.participants.data), 'success')
         return redirect(url_for('activities.overview'))
@@ -30,8 +32,7 @@ def overview():
         flash_errors(form)
 
     if len(form.participants) == 0:
-        # Make sure to have two fields in the field list when rendering the page
-        form.participants.append_entry("")
+        # Make sure to have at least one fields in the field list when rendering the page
         form.participants.append_entry("")
     return render_template("activity/overview.html", form=form, activities=activities)
 

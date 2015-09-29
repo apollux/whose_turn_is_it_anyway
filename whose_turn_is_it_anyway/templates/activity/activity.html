@@ -12,7 +12,13 @@
         <tr><th>Participant</th><th>Times</th><th></th></tr>
         {% for participant in activity.participants %}
         <tr>
-            <td>{{ participant.nick_name }}</td>
+            <td>
+                {% if participant.user %}
+                    {{participant.user.username }}
+                {% else %}
+                    {{participant.nick_name }}
+                {% endif %}
+            </td>
             <td>{{ participant.occurrences|length }}</td>
             <td><input type="submit" id="{{ participant.id }}"  name="{{ participant.id }}" value="Did it" /></td>
         </tr>

@@ -12,7 +12,7 @@ from whose_turn_is_it_anyway.database import (
 
 class Activity(SurrogatePK, Model):
     __tablename__ = 'activities'
-    name = Column(db.String(80), unique=False, nullable=False)
+    name = Column(db.String(80), unique=False, nullable=True)
     creator_id = Column(db.Integer, db.ForeignKey('users.id'))
     creator = relationship('User', uselist=False)
     participants = relationship("Participant")
@@ -23,12 +23,14 @@ class Activity(SurrogatePK, Model):
 
 class Participant(SurrogatePK, Model):
     __tablename__ = 'participants'
-    nick_name = Column(db.String(80), unique=False, nullable=False)
+    nick_name = Column(db.String(80), unique=False, nullable=True)
     activity_id = Column(db.Integer, db.ForeignKey('activities.id'))
     occurrences = relationship('Occurrence')
+    user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    user = relationship("User", uselist=False)
 
-    def __init__(self, name, activity_id, **kwargs):
-        db.Model.__init__(self, nick_name=name, activity_id=activity_id, **kwargs)
+    def __init__(self, activity_id, name=None, user_id=None, **kwargs):
+        db.Model.__init__(self, nick_name=name, activity_id=activity_id, user_id=user_id, **kwargs)
 
 
 class Occurrence(SurrogatePK, Model):

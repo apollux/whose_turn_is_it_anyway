@@ -24,6 +24,10 @@
 
     <div data-toggle="fieldset" id="participants-fieldset">
         <div class="form-group">
+            {{ form.current_user_as_participant.label }}
+            {{ form.current_user_as_participant }}
+        </div>
+        <div class="form-group">
             {{ form.participants.label }}
             {% for participant in form.participants %}
             <span data-toggle="fieldset-entry">
