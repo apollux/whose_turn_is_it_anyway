@@ -46,3 +46,4 @@ docs/_build
 env/
 dev.db
 migrations/
+.idea/ st
