@@ -18,9 +18,12 @@ class Config(object):
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change me
-    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
+    DEBUG = False 
+#    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change me
+
+    DB_PATH = os.path.join(Config.PROJECT_ROOT, 'prod.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
+    DEBUG_TB_ENABLED = False # Disable Debug toolbar
 
 
 class DevConfig(Config):
