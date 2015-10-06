@@ -54,7 +54,6 @@ def activity_detail(activity_id):
     activity = Activity.query.filter_by(id=activity_id).one()
 
     current_user_id = int(current_user.get_id())
-    print(type(current_user.get_id()))
     if activity.creator_id != current_user_id and \
        current_user_id not in [p.user_id for p in activity.participants]:
         flash("Not allowed to access activity", 'warning')
@@ -64,7 +63,7 @@ def activity_detail(activity_id):
         # TODO validate id
 
         participant_id = next(request.form.keys())
-        Occurrence.create(participant_id=participant_id)
+        Occurrence.create(activity_id=activity.id, participant_id=participant_id, creator_id=current_user_id)
         return redirect(url_for('activities.activity_detail', activity_id=activity_id))
     return render_template("activity/activity.html", activity=activity)
 

@@ -1,29 +1,38 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<h1>Welcome {{ session.username }}</h1>
 
 <div class="container-narrow">
         <h1>Activity {{ activity.name }}</h1>
         <br/>
 
     <form id="NewOccurrenceForm" class="form form-register" method="POST" action="" role="form">
+        <table class="table">
+            <tr><th>Participant</th><th>Count</th><th></th></tr>
+            {% for participant in activity.participants %}
+            <tr>
+                <td>
+                    {{ participant.get_name() }}
+                </td>
+                <td>{{ participant.occurrences|length }}</td>
+                <td><input type="submit" id="{{ participant.id }}"  name="{{ participant.id }}" value="+1" /></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+
+    <h2>Log</h2>
+    {% if activity.occurrences|length > 0 %}
     <table class="table">
-        <tr><th>Participant</th><th>Count</th><th></th></tr>
-        {% for participant in activity.participants %}
+        <tr><th>When</th><th>Who</th><th>By</th></tr>
+        {% for occurrence in activity.occurrences %}
         <tr>
-            <td>
-                {% if participant.user %}
-                    {{participant.user.username }}
-                {% else %}
-                    {{participant.nick_name }}
-                {% endif %}
-            </td>
-            <td>{{ participant.occurrences|length }}</td>
-            <td><input type="submit" id="{{ participant.id }}"  name="{{ participant.id }}" value="+1" /></td>
+            <td>{{ occurrence.date_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ occurrence.participant.get_name() }}</td>
+            <td>{{ occurrence.creator.username }}</td>
         </tr>
         {% endfor %}
     </table>
-
+    {% endif %}
 </div>
 {% endblock %}

@@ -12,9 +12,9 @@
             <li><a href="{{ url_for('activities.activity_detail', activity_id=activity.id) }}">{{ activity.name }}</a></li>
         {% endfor %}
         </ul>
+    {% endif %}
 
     <h2>New Activity</h2>
-    {% endif %}
     <form id="createActivityForm" class="form" method="POST" action="" role="form">
     {{ form.hidden_tag() }}
     <div class="form-group">
