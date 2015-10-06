@@ -14,7 +14,7 @@
                 <td>
                     {{ participant.get_name() }}
                 </td>
-                <td>{{ participant.occurrences|length }}</td>
+                <td>{{ participant.number_of_occurrences }}</td>
                 <td><input type="submit" id="{{ participant.id }}"  name="{{ participant.id }}" value="+1" /></td>
             </tr>
             {% endfor %}
