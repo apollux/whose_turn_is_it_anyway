@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import Form
-from wtforms import TextField, PasswordField
+from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import DataRequired
 
 from whose_turn_is_it_anyway.user.models import User
@@ -9,6 +9,7 @@ from whose_turn_is_it_anyway.user.models import User
 class LoginForm(Form):
     username = TextField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember me')
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)

@@ -25,7 +25,7 @@ def home():
     # Handle logging in
     if request.method == 'POST':
         if form.validate_on_submit():
-            login_user(form.user)
+            login_user(form.user, remember=form.remember_me.data)
             flash("You are logged in.", 'success')
             redirect_url = request.args.get("next") or url_for("activities.overview")
             return redirect(redirect_url)
