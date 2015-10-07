@@ -25,7 +25,7 @@ class Activity(SurrogatePK, Model):
 
     def whose_turn_is_it(self):
         assert self.participants
-        candidates = sorted(self.participants, key=attrgetter('number_of_occurrences'), reverse=True)
+        candidates = sorted(self.participants, key=attrgetter('number_of_occurrences'))
         candidates = [p for p in candidates if p.number_of_occurrences == candidates[0].number_of_occurrences]
         candidates = sorted(candidates, key=attrgetter('last_occurrence'))
         candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
@@ -52,12 +52,12 @@ class Participant(Model):
     nick_name = Column(db.String(80), unique=False, nullable=True)
     activity_id = Column(db.Integer, db.ForeignKey('activities.id'))
 
-    number_of_occurrences = column_property(select([func.count(Occurrence.id)]).
-                                            where(Occurrence.participant_id == id))
+    number_of_occurrences = column_property(select([func.count(Occurrence.id)])
+                                            .where(Occurrence.participant_id == id))
 
-    last_occurrence = column_property(select([func.count(Occurrence.id)]).
-                                      where(Occurrence.participant_id == id).
-                                      order_by(Occurrence.date_time).limit(1))
+    last_occurrence = column_property(select([Occurrence.date_time])
+                                      .where(Occurrence.participant_id == id)
+                                      .order_by(Occurrence.date_time).limit(1))
 
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     user = relationship("User", uselist=False)
