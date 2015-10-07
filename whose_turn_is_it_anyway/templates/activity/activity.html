@@ -5,7 +5,7 @@
 <div class="container-narrow">
         <h1>Activity {{ activity.name }}</h1>
         <br/>
-
+    <p class="text-info">It is {{ activity.whose_turn_is_it() }}'s turn!</p>
     <form id="NewOccurrenceForm" class="form form-register" method="POST" action="" role="form">
         <table class="table">
             <tr><th>Participant</th><th>Count</th><th></th></tr>
