@@ -60,11 +60,13 @@ def activity_detail(activity_id):
         return redirect(url_for('activities.overview'))
 
     if request.method == 'POST':
-        # TODO validate id
-        participant_id = next(request.form.keys())
-        Occurrence.create(activity_id=activity.id,
-                          participant_id=participant_id,
-                          creator_id=current_user_id)
+        participant_id = int(next(request.form.keys()))
+        if participant_id not in [p.id for p in activity.participants]:
+            flash("Failed to +1", 'warning')
+        else:
+            Occurrence.create(activity_id=activity.id,
+                              participant_id=participant_id,
+                              creator_id=current_user_id)
         return redirect(url_for('activities.activity_detail', activity_id=activity_id))
 
     return render_template("activity/activity.html", activity=activity)
