@@ -17,6 +17,7 @@ from whose_turn_is_it_anyway import public, user, activity
 from flask_admin.contrib.sqla import ModelView
 from whose_turn_is_it_anyway.user.models import User
 from whose_turn_is_it_anyway.activity.models import Activity
+from whose_turn_is_it_anyway.activity.filters import date_time_format, date_time_to_local
 
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here:
@@ -29,6 +30,7 @@ def create_app(config_object=ProdConfig):
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
+    register_filters(app)
     return app
 
 
@@ -61,3 +63,9 @@ def register_errorhandlers(app):
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
     return None
+
+
+def register_filters(app):
+    app.jinja_env.filters['date_time_format'] = date_time_format
+    app.jinja_env.filters['date_time_to_local'] = date_time_to_local
+

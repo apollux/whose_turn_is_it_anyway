@@ -61,9 +61,11 @@ def activity_detail(activity_id):
 
     if request.method == 'POST':
         # TODO validate id
-
         participant_id = next(request.form.keys())
-        Occurrence.create(activity_id=activity.id, participant_id=participant_id, creator_id=current_user_id)
+        Occurrence.create(activity_id=activity.id,
+                          participant_id=participant_id,
+                          creator_id=current_user_id)
         return redirect(url_for('activities.activity_detail', activity_id=activity_id))
+
     return render_template("activity/activity.html", activity=activity)
 

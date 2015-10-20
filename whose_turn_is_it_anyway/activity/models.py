@@ -36,14 +36,17 @@ class Activity(SurrogatePK, Model):
 class Occurrence(SurrogatePK, Model):
     __tablename__ = 'occurrences'
     activity_id = Column(db.Integer, db.ForeignKey('activities.id'))
-    date_time = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
+    date_time = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow())
     participant_id = Column(db.Integer, db.ForeignKey('participants.id'))
     participant = relationship('Participant', uselist=False)
     creator_id = Column(db.Integer, db.ForeignKey('users.id'))
     creator = relationship("User", uselist=False)
 
     def __init__(self, activity_id, participant_id, creator_id, **kwargs):
-        db.Model.__init__(self, activity_id=activity_id, participant_id=participant_id, creator_id=creator_id, **kwargs)
+        db.Model.__init__(self, activity_id=activity_id,
+                          participant_id=participant_id,
+                          creator_id=creator_id,
+                          **kwargs)
 
 
 class Participant(Model):
