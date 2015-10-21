@@ -24,11 +24,11 @@
     <h2>Log</h2>
     {% if activity.occurrences|length > 0 %}
     <table class="table">
-        <tr><th>When</th><th>Who</th><th>By</th></tr>
+        <tr><th>When</th><th>Who</th><th>Logged by</th></tr>
         {% for occurrence in activity.occurrences %}
         <tr>
             <td>{{ occurrence.date_time|date_time_to_local('Europe/Amsterdam')|date_time_format }}</td>
-            <td>{{ occurrence.participant.get_name()     }}</td>
+            <td>{{ occurrence.participant.get_name() }}</td>
             <td>{{ occurrence.creator.username }}</td>
         </tr>
         {% endfor %}
