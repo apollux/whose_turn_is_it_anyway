@@ -27,8 +27,13 @@ class Activity(SurrogatePK, Model):
         assert self.participants
         candidates = sorted(self.participants, key=attrgetter('number_of_occurrences'))
         candidates = [p for p in candidates if p.number_of_occurrences == candidates[0].number_of_occurrences]
-        candidates = sorted(candidates, key=attrgetter('last_occurrence'))
-        candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
+
+        candidates_without_occurrences = [c for c in candidates if c.last_occurrence is None]
+        if len(candidates_without_occurrences) == 0:
+            candidates = candidates_without_occurrences
+            candidates = sorted(candidates, key=attrgetter('last_occurrence'))
+            candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
+
         candidates = sorted(candidates, key=methodcaller('get_name'))
         return candidates[0].get_name()
 
