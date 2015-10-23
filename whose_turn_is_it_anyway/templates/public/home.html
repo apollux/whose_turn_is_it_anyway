@@ -2,12 +2,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
+
 <div class="jumbotron">
 
   <h1>Welcome to Whose turn is it anyway?</h1>
 
   <p>Start tracking whose turn it is to perform those boring, fun or repetitive tasks!</p>
+{% if not current_user.is_authenticated() %}
   <p><a href="{{ url_for('public.register') }}" class="btn btn-primary btn-large">Register here &raquo;</a></p>
+{% endif %}
+
 </div>
 
 {% endblock %}
