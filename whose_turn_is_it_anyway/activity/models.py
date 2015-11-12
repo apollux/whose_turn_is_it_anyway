@@ -30,9 +30,11 @@ class Activity(SurrogatePK, Model):
 
         candidates_without_occurrences = [c for c in candidates if c.last_occurrence is None]
         if len(candidates_without_occurrences) == 0:
-            candidates = candidates_without_occurrences
-            candidates = sorted(candidates, key=attrgetter('last_occurrence'))
+            candidates = sorted(candidates, key=attrgetter('last_occurrence'), reverse=True)
             candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
+
+        else:
+            candidates = candidates_without_occurrences
 
         candidates = sorted(candidates, key=methodcaller('get_name'))
         return candidates[0].get_name()
@@ -71,8 +73,8 @@ class Participant(Model):
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     user = relationship("User", uselist=False)
 
-    def __init__(self, activity_id, name=None, user_id=None, **kwargs):
-        db.Model.__init__(self, nick_name=name, activity_id=activity_id, user_id=user_id, **kwargs)
+    def __init__(self, name=None, **kwargs):
+        db.Model.__init__(self, nick_name=name, **kwargs)
 
     def get_name(self):
         if self.user:
