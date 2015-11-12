@@ -46,7 +46,7 @@ class TestLoggingIn:
         # Submits
         res = form.submit()
         # sees error
-        assert "Invalid password" in res
+        assert "Invalid username and password combination" in res
 
     def test_sees_error_message_if_username_doesnt_exist(self, user, testapp):
         # Goes to homepage
@@ -58,7 +58,7 @@ class TestLoggingIn:
         # Submits
         res = form.submit()
         # sees error
-        assert "Unknown user" in res
+        assert "Invalid username and password combination" in res
 
 
 class TestRegistering:
