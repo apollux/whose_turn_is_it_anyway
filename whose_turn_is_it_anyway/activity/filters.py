@@ -2,7 +2,6 @@ from delorean import Delorean
 
 
 def date_time_format(date_time, format='%Y-%m-%d %H:%M'):
-    print(type(date_time))
     return date_time.strftime(format)
 
 
