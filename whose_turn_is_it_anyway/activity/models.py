@@ -27,12 +27,11 @@ class Activity(SurrogatePK, Model):
         assert self.participants
         candidates = sorted(self.participants, key=attrgetter('number_of_occurrences'))
         candidates = [p for p in candidates if p.number_of_occurrences == candidates[0].number_of_occurrences]
-
         candidates_without_occurrences = [c for c in candidates if c.last_occurrence is None]
-        if len(candidates_without_occurrences) == 0:
-            candidates = sorted(candidates, key=attrgetter('last_occurrence'), reverse=True)
-            candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
 
+        if len(candidates_without_occurrences) == 0:
+            candidates = sorted(candidates, key=attrgetter('last_occurrence'))
+            candidates = [p for p in candidates if p.last_occurrence == candidates[0].last_occurrence]
         else:
             candidates = candidates_without_occurrences
 
@@ -68,7 +67,8 @@ class Participant(Model):
 
     last_occurrence = column_property(select([Occurrence.date_time])
                                       .where(Occurrence.participant_id == id)
-                                      .order_by(Occurrence.date_time).limit(1))
+                                      .order_by(Occurrence.date_time.desc())
+                                      .limit(1))
 
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     user = relationship("User", uselist=False)
@@ -81,6 +81,10 @@ class Participant(Model):
             return self.user.username
         else:
             return self.nick_name
+
+    def __repr__(self):
+        return "({}, activity_id: {}, number_of_occurrences: {}, last_occurrence: {})".format(
+            self.get_name(), self.activity_id, self.number_of_occurrences, self.last_occurrence)
 
 
 
