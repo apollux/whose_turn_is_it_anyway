@@ -21,7 +21,7 @@ class ProdConfig(Config):
     DEBUG = False 
 #    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change me
 
-    DB_PATH = os.path.join(Config.PROJECT_ROOT, 'prod.db')
+    DB_PATH = os.path.join('/data/', 'prod.db')
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
     DEBUG_TB_ENABLED = False # Disable Debug toolbar
     ASSETS_DEBUG = True  # TODO this should work...
