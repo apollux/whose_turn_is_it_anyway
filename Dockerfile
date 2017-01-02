@@ -11,9 +11,9 @@ RUN apk add --no-cache \
     musl-dev \
     linux-headers
 RUN pip install -r requirements.txt
-RUN mkdir -p /var/app
+RUN mkdir -p /data
 ENTRYPOINT ["python"]
 CMD ["manage.py", "server", "-h", "0.0.0.0"]
 EXPOSE 5000
-VOLUME /var/app
+VOLUME /data
 
