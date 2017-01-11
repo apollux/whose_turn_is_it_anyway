@@ -58,9 +58,7 @@ def activity_detail(activity_id):
        current_user_id not in [p.user_id for p in activity.participants]:
         flash("Not allowed to access activity", 'warning')
         return redirect(url_for('activities.overview'))
-
-    form = PlusOneForm(request.form)
-    if form.validate_on_submit():
+    if request.method == 'POST':
         participant_id = int(request.form.keys()[1])
         if participant_id not in [p.id for p in activity.participants]:
             flash("Failed to +1", 'warning')
