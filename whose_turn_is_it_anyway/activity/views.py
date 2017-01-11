@@ -59,7 +59,7 @@ def activity_detail(activity_id):
         flash("Not allowed to access activity", 'warning')
         return redirect(url_for('activities.overview'))
     if request.method == 'POST':
-        participant_id = int(request.form.keys()[1])
+        participant_id = int(request.form.keys()[0])
         if participant_id not in [p.id for p in activity.participants]:
             flash("Failed to +1", 'warning')
         else:
